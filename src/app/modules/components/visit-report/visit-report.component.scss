@@ -1,0 +1,55 @@
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .QR-scanner {
+    margin-bottom: 20px;
+    width: 150px;
+  }
+  
+  input[type="text"],
+  textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  
+  button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Optional: Style anchor tags */
+  a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+
+  .scanner {
+    width: 50%;
+    margin-left: 85px;
+    padding: 10px 10px 6px 10px;
+    // border: 2px solid black;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Adding a subtle shadow effect */
+  }
+  

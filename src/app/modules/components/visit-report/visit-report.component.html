@@ -1,0 +1,32 @@
+<div class="container">
+  <h1>YIL IT VISIT REPORT</h1>
+
+  <form [formGroup]="form1">
+    <!-- QR Scanner -->
+    <div *ngIf="showScanner">
+      <div class="scanner">
+        <zxing-scanner (scanSuccess)="onQRCodeScanned($event)"></zxing-scanner>
+      </div>
+      <button (click)="hideScanner()">Hide Scanner</button>
+    </div>
+
+    <button *ngIf="!showScanner" (click)="showscanner()">Update</button>
+
+    <!-- Input fields -->
+
+
+    <div>
+      <label for="issueReport">Issue Report:</label>
+      <textarea id="issueReport" name="issueReport" formControlName="report"></textarea>
+    </div>
+
+    <!-- Update button -->
+
+    <!-- Submit button -->
+    <button (click)="postmethod()">Submit</button>
+
+    <div *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+  </form>
+</div>
