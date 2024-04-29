@@ -52,7 +52,7 @@ export class VisitReportComponent implements OnInit {
 
   }
 
-  // Other methods...
+
 
 
   hideScanner(): void {
