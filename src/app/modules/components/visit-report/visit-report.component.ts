@@ -68,14 +68,14 @@ export class VisitReportComponent implements OnInit {
 }
 
 isDuplicateQRCode(newQRCode: any): boolean {
-    // Check if the newly scanned QR code already exists in the qrCodes array
+
     for (let i = 0; i < this.qrCodes.length; i++) {
         const element = this.qrCodes[i];
-        // Iterate through each element of qrCodes
+
         for (const key in element) {
             if (element.hasOwnProperty(key)) {
                 if (element[key] === newQRCode) {
-                    // If the new QR code matches any existing one, return true
+
                     return true;
                 }
             }
