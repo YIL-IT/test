@@ -17,17 +17,9 @@ export class VisitReportComponent implements OnInit {
   emp_no: any;
   emp_name: any;
   report: any;
-  qr_Value: any;
-  // showScanner: boolean = true; 
-  // scannedQRs: any[] = []; 
-  // scanCount: number = 0; 
-
-  scannedQRs: Set<any> = new Set(); 
-  showScanner: boolean = true; 
-  errorMessage: string = ''; 
-  canScan: boolean = true;
-  receivedData: any;
-  empDetails: any;
+  qrCodes: any[] = []; // Array to store scanned QR codes
+  showScanner: boolean = true;
+  updateBtn: boolean = false;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -40,58 +32,63 @@ export class VisitReportComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
-
-    this._datashare.Emp_Details_data.subscribe((data) => {
-      this.empDetails = data;
-
-      console.log(this.empDetails , 'sdfghjuklrtyu');
-      
-  
-    });
-
+    // Component initialization logic
   }
 
-
-
-
-  hideScanner(): void {
-    this.showScanner = false;
-  }
-
-  showscanner(): void {
-    this.showScanner = true;
-    this.errorMessage = ''; // Reset error message when showing scanner again
-  }
+  // Other methods...
 
   onQRCodeScanned(event: any): void {
-    if (!this.canScan) return; // Stop scanning if canScan is false
+    this.qrValue = event;
+    console.log('Scanned QR code data:', this.qrValue);
 
-    const scannedData = event;
-    console.log('Scanned QR code data:', scannedData);
+    if (this.qrValue) {
+      // Show a snackbar
+      this.openSnackBar('QR code scanned successfully!');
 
-    if (scannedData) {
-      if (!this.scannedQRs.has(scannedData)) {
-        this.scannedQRs.add(scannedData); // Add the scanned data to the set
-        this.openSnackBar('QR code scanned successfully!');
-        this.hideScanner();
-      } else {
-        this.errorMessage = 'QR code already scanned';
-        this.canScan = false; // Stop scanning if the same QR code is scanned again
+      // Check for duplicate QR codes
+      if (this.isDuplicateQRCode(this.qrValue)) {
+        // If the QR code is a duplicate, show an error message
+        this.openSnackBar('QR code Already Scanned');
+        return; // Stop further execution
       }
+
+      // Generate a unique key for the scanned QR code
+      const key = 'scan_' + (this.qrCodes.length + 1);
+
+      // Add scanned QR code to array with the unique key
+      this.qrCodes.push({ [key]: this.qrValue });
+      
+      console.log(this.qrCodes , 'qrCode datas');
+
+      this.showScanner = false;
+      this.updateBtn = true;
     } else {
-      this.openSnackBar('QR code scanning unsuccessful');
+      this.openSnackBar('QR code scanning Unsuccessful');
     }
-  }
+}
 
-  updateScanner(): void {
+isDuplicateQRCode(newQRCode: any): boolean {
+    // Check if the newly scanned QR code already exists in the qrCodes array
+    for (let i = 0; i < this.qrCodes.length; i++) {
+        const element = this.qrCodes[i];
+        // Iterate through each element of qrCodes
+        for (const key in element) {
+            if (element.hasOwnProperty(key)) {
+                if (element[key] === newQRCode) {
+                    // If the new QR code matches any existing one, return true
+                    return true;
+                }
+            }
+        }
+    }
+    // If the new QR code is not found in the array, return false
+    return false;
+}
+
+  updateQrcode(){
     this.showScanner = true;
-    this.errorMessage = ''; 
-    this.canScan = true; // Allow scanning again when the scanner is shown
+    this.updateBtn = false;
   }
-
-  
-
 
   openSnackBar(message: string): void {
     this.snackBar.open(message, 'Close', {
@@ -105,127 +102,91 @@ export class VisitReportComponent implements OnInit {
     report: ['', Validators.required],
   });
 
-  // postmethod() {
-  //   // Get current date and time
-  //   const currentDate = new Date();
+//   postmethod() {
+//     // Get current date and time
+//     // const currentDate = new Date();
 
-  //   // Format the date and time as "YYYY-MM-DD HH:MM:SS"
-  //   const formattedDate = `${currentDate.getFullYear()}-${(
-  //     currentDate.getMonth() + 1
-  //   ).toString().padStart(2, '0')}-${currentDate
-  //     .getDate()
-  //     .toString()
-  //     .padStart(2, '0')} ${currentDate
-  //     .getHours()
-  //     .toString()
-  //     .padStart(2, '0')}:${currentDate
-  //     .getMinutes()
-  //     .toString()
-  //     .padStart(2, '0')}:${currentDate
-  //     .getSeconds()
-  //     .toString()
-  //     .padStart(2, '0')}`.replace(/\.(\d{6})\b/, ''); // This removes the milliseconds
-    
+//     // // Format the date and time as "YYYY-MM-DD HH:MM:SS"
+//     // const formattedDate = `${currentDate.getFullYear()}-${(
+//     //   currentDate.getMonth() + 1
+//     // )
+//     //   .toString()
+//     //   .padStart(2, '0')}-${currentDate
+//     //   .getDate()
+//     //   .toString()
+//     //   .padStart(2, '0')} ${currentDate
+//     //   .getHours()
+//     //   .toString()
+//     //   .padStart(2, '0')}:${currentDate
+//     //   .getMinutes()
+//     //   .toString()
+//     //   .padStart(2, '0')}:${currentDate
+//     //   .getSeconds()
+//     //   .toString()
+//     //   .padStart(2, '0')}`.replace(/\.(\d{6})\b/, ''); // This removes the milliseconds
 
-  //   // Assign the formatted date and time to a variable
-  //   const dateTime = formattedDate;
+//     // // Assign the formatted date and time to a variable
+//     // const dateTime = formattedDate;
 
-  //   this.emp_no = this.form1.value.emp_no;
-  //   this.emp_name = this.form1.value.name;
-  //   this.report = this.form1.value.report;
-  //   this.qr_Value = this.qrValue;
+//     // this.emp_no = this.form1.value.emp_no;
+//     // this.emp_name = this.form1.value.name;
+//     // this.report = this.form1.value.report;
 
-  //   // Construct the request body including the current date and time
-  //   let body: any = {
-  //     emp_no: this.emp_no,
-  //     emp_name: this.emp_name,
-  //     issue_report: this.report,
-  //     qr_code: this.qr_Value,
-  //     date_time: dateTime, // Include the formatted date and time
-  //   };
+//     // Construct the request body including the current date and time
+//     let body: any = {
+//       // emp_no: this.emp_no,
+//       // emp_name: this.emp_name,
+//       // issue_report: this.report,
+//       qr_codes: this.qrCodes, // Send all scanned QR codes
+//       // date_time: dateTime, // Include the formatted date and time
+//     };
 
-  //   console.log(body, 'body');
+//     console.log(body, 'body');
 
-  //   this.apiservice.inserEmpDetails(body).subscribe((res) => {
-  //     console.log(res);
-  //     if (res.statusCode === 200) {
-  //       // location.reload();
-  //       this.snackBar.open('Report sent Successfully', 'Close', {
-  //         duration: 3000,
-  //       });
-  //     } else {
-  //       this.snackBar.open('Report sending Unsuccessful', 'Close', {
-  //         duration: 3000,
-  //       });
-  //     }
-  //   });
-  // }
+//     this.apiservice.inserEmpDetails(body).subscribe((res) => {
+//       console.log(res);
+//       if (res.statusCode === 200) {
+//         // Clear the array and local storage after successful submission
+//         this.qrCodes = [];
+//         localStorage.removeItem('scannedQRCodes');
 
-  postmethod() {
-    if (this.showScanner) {
-      this.errorMessage = 'Please update before submitting';
-      return;
+//         this.snackBar.open('Report sent Successfully', 'Close', {
+//           duration: 3000,
+//         });
+//       } else {
+//         this.snackBar.open('Report sending Unsuccessful', 'Close', {
+//           duration: 3000,
+//         });
+//       }
+//     });
+// }
+
+postmethod() {
+  // Construct the request body with qr_code keys and URLs
+  const body = {
+    qr_codes: this.qrCodes
+  };
+
+  console.log(body, 'body');
+
+  // Assuming 'inserEmpDetails' is your API endpoint for submitting QR code data
+  this.apiservice.inserEmpDetails(body).subscribe((res) => {
+    console.log(res);
+    if (res.statusCode === 200) {
+      // Clear the array and local storage after successful submission
+      this.qrCodes = [];
+      localStorage.removeItem('scannedQRCodes');
+
+      this.snackBar.open('Report sent Successfully', 'Close', {
+        duration: 3000,
+      });
+    } else {
+      this.snackBar.open('Report sending Unsuccessful', 'Close', {
+        duration: 3000,
+      });
     }
-  
-    const currentDate = new Date();
-    const formattedDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
-      .toString()
-      .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')} ${currentDate
-      .getHours()
-      .toString()
-      .padStart(2, '0')}:${currentDate.getMinutes().toString().padStart(2, '0')}:${currentDate
-      .getSeconds()
-      .toString()
-      .padStart(2, '0')}`.replace(/\.(\d{6})\b/, '');
-  
-    const dateTime = formattedDate;
-  
-    this.emp_no = this.form1.value.emp_no;
-    this.emp_name = this.form1.value.name;
-    this.report = this.form1.value.report;
-  
-    // Assuming this.qrValue is the data of the scanned QR code
-    const qrValue = this.qrValue;
-  
-    const body: any = {
-      emp_no: this.emp_no,
-      emp_name: this.emp_name,
-      issue_report: this.report,
-      qr_code: qrValue,
-      date_time: dateTime,
-    };
-  
-    console.log(body, 'body');
-  
-    this.apiservice.inserEmpDetails(body).subscribe(
-      (res) => {
-        console.log(res);
-        if (res.statusCode === 200) {
-          this.snackBar.open('Report sent Successfully', 'Close', {
-            duration: 3000,
-          });
-        } else {
-          this.snackBar.open('Report sending Unsuccessful', 'Close', {
-            duration: 3000,
-          });
-        }
-      },
-      (error) => {
-        // Handle error
-        if (error.status === 409) {
-          // If there's a conflict (duplicate), display a message to the user
-          this.snackBar.open('QR code already scanned', 'Close', {
-            duration: 3000,
-          });
-        } else {
-          // If there's another error, display a generic error message
-          this.snackBar.open('An error occurred', 'Close', {
-            duration: 3000,
-          });
-        }
-      }
-    );
-  }
-  
+  });
+}
+
 
 }

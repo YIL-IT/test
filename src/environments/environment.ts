@@ -7,7 +7,7 @@ export const environment = {
   // baseURL:'',
 
 
-inserEmpDetails: baseURL +'test/Insert-emp-details',
+inserEmpDetails: baseURL +'test/insert-qr-codes',
 
 EmpDetails: baseURL +'test/employee-data',
 
