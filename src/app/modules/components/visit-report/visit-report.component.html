@@ -1,20 +1,19 @@
 <div class="container">
-  <h1> YIL IT VISIT REPORT</h1>
+  <h1>YIL IT VISIT REPORT</h1>
 
   <form [formGroup]="form1">
+    <!-- QR Scanner -->
 
-  <!-- QR Scanner -->
+    <div class="scanner" *ngIf="showScanner">
+      <zxing-scanner (scanSuccess)="onQRCodeScanned($event)"></zxing-scanner>
+    </div>
 
-<div class="scanner" *ngIf="showScanner">
-  <zxing-scanner (scanSuccess)="onQRCodeScanned($event)"></zxing-scanner>
-</div>
+    <div *ngIf="updateBtn">
+      <button (click)="updateQrcode()">Update</button>
+    </div>
 
-<div *ngIf="updateBtn">
-  <button (click)="updateQrcode()">Update</button>
-</div>
-
-  <!-- Input fields -->
-  <!-- <div>
+    <!-- Input fields -->
+    <!-- <div>
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" formControlName="name">
   </div>
@@ -22,14 +21,12 @@
     <label for="empNo">Employee Number:</label>
     <input type="text" id="empNo" name="empNo" formControlName="emp_no">
   </div> -->
-  <div>
-    <label for="issueReport">Issue Report:</label>
-    <textarea id="issueReport" name="issueReport" ></textarea>
-  </div>
+    <div>
+      <label for="issueReport">Issue Report:</label>
+      <textarea id="issueReport" name="issueReport"></textarea>
+    </div>
 
-  <!-- Submit button -->
-  <button (click)="postmethod()">Submit</button>
-
-</form>
-
+    <!-- Submit button -->
+    <button (click)="postmethod()">Submit</button>
+  </form>
 </div>
