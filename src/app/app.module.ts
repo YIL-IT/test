@@ -24,7 +24,7 @@ import { EmpLoginComponent } from './modules/components/emp-login/emp-login.comp
     HttpClientModule,
     SharedModule,
     ReactiveFormsModule,
-    FormsModule,
+    FormsModule,  
     BrowserAnimationsModule,
     ZXingScannerModule
 
