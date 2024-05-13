@@ -1,4 +1,4 @@
-const baseURL = 'http://localhost:3000/api/';
+const baseURL = 'https://it-visit-backend.vercel.app/api/';
 // const baseURL = 'http://localhost:3000/api/';
 
 export const environment = {
